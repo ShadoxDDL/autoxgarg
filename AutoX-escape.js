@@ -115,11 +115,7 @@
     }
   }
 
-  function findAutoXWindow() {
-    const direct = document.querySelector(
-      '[data-name="gargonem-autox"], .gargonem-autox, #gargonem-autox'
-    );
-    if (direct) return direct;
+  function findAutoXEnabledRow() {
     const candidates = [...document.querySelectorAll("div")].filter(element =>
       element.textContent?.includes("Włącz AutoX") || element.textContent?.includes("WĹ‚Ä…cz AutoX")
     );
@@ -128,8 +124,8 @@
 
   function installButton() {
     if (document.querySelector(".autox-escape-button")) return;
-    const windowElement = findAutoXWindow();
-    if (!windowElement) return;
+    const enabledRow = findAutoXEnabledRow();
+    if (!enabledRow?.parentElement) return;
     const button = document.createElement("button");
     button.type = "button";
     button.className = "autox-escape-button";
@@ -138,13 +134,13 @@
       event.stopPropagation();
       queueOrEscape();
     });
-    windowElement.appendChild(button);
+    enabledRow.insertAdjacentElement("afterend", button);
     updateButton();
   }
 
   const style = document.createElement("style");
   style.textContent = `
-    .autox-escape-button { display:block; width:calc(100% - 8px); margin:5px 4px 1px;
+    .autox-escape-button { display:block; box-sizing:border-box; width:100%; margin:4px 0;
       padding:3px 6px; border:1px solid #777; border-radius:3px; background:#181818;
       color:#fff; cursor:pointer; font-weight:bold; }
     .autox-escape-button.active { border-color:#7cff85;
