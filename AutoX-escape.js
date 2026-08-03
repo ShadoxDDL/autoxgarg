@@ -140,9 +140,13 @@
 
   const style = document.createElement("style");
   style.textContent = `
-    .autox-escape-button { display:block; box-sizing:border-box; width:100%; margin:4px 0;
-      padding:3px 6px; border:1px solid #777; border-radius:3px; background:#181818;
-      color:#fff; cursor:pointer; font-weight:bold; }
+    .autox-escape-button { display:block !important; box-sizing:border-box !important;
+      width:100% !important; height:24px !important; min-height:24px !important;
+      max-height:24px !important; margin:4px 0 !important; padding:3px 6px !important;
+      border:1px solid #777 !important; border-radius:3px !important;
+      background:#181818; color:#fff; cursor:pointer;
+      font-family:Arial,sans-serif !important; font-size:11px !important;
+      font-weight:bold !important; line-height:16px !important; }
     .autox-escape-button.active { border-color:#7cff85;
       box-shadow:0 0 5px #4cff5a,inset 0 0 5px #173d1b; color:#9cff9c; }
   `;
