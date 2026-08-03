@@ -123,6 +123,18 @@
     return candidates.sort((a, b) => a.childElementCount - b.childElementCount)[0] || null;
   }
 
+  function findAutoXHeader(startElement) {
+    let ancestor = startElement;
+    while (ancestor) {
+      const title = [...ancestor.querySelectorAll("div, span")].find(element =>
+        element.textContent?.trim() === "AutoX"
+      );
+      if (title?.parentElement) return title.parentElement;
+      ancestor = ancestor.parentElement;
+    }
+    return null;
+  }
+
   function installButton() {
     const enabledRow = findAutoXEnabledRow();
     if (!enabledRow?.parentElement) return;
@@ -146,17 +158,10 @@
     controlsContainer.classList.toggle("autox-is-collapsed", collapsed);
 
     if (!document.querySelector(".autox-collapse-button")) {
-      const windowRoot = [...function* () {
-        let element = controlsContainer;
-        while (element) {
-          yield element;
-          element = element.parentElement;
-        }
-      }()].find(element => element.textContent?.includes("AutoX") &&
-        element.querySelector?.(".autox-escape-button"));
+      const header = findAutoXHeader(controlsContainer);
 
-      if (windowRoot) {
-        windowRoot.classList.add("autox-window-root");
+      if (header) {
+        header.classList.add("autox-window-header");
         const collapseButton = document.createElement("button");
         collapseButton.type = "button";
         collapseButton.className = "autox-collapse-button";
@@ -171,7 +176,7 @@
           collapseButton.textContent = next ? "+" : "−";
           collapseButton.title = next ? "Rozwiń AutoX" : "Zwiń AutoX";
         });
-        windowRoot.appendChild(collapseButton);
+        header.appendChild(collapseButton);
       }
     }
     updateButton();
@@ -187,7 +192,7 @@
     .autox-escape-container.autox-is-collapsed > .autox-escape-button ~ * {
       display:none !important;
     }
-    .autox-window-root { position:relative; }
+    .autox-window-header { position:relative; }
     .autox-collapse-button { position:absolute; top:3px; right:25px; z-index:20;
       width:18px; height:18px; padding:0; border:0; background:transparent;
       color:#ddd; font:bold 16px/18px Arial; cursor:pointer; }
